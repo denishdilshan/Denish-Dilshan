@@ -16,6 +16,17 @@ type Service = {
   text: string;
 };
 
+type EducationItem = {
+  label: string;
+  title: string;
+  subtitle: string;
+  period: string;
+  summary: string;
+  highlights: string[];
+  icon: ReactNode;
+  step: string;
+};
+
 type ContactItem = {
   icon: ReactNode;
   label: string;
@@ -313,10 +324,83 @@ function ProjectCard({
   );
 }
 
+function EducationMilestone({
+  item,
+  index,
+}: {
+  item: EducationItem;
+  index: number;
+}) {
+  return (
+    <motion.article
+      variants={{
+        hidden: { opacity: 0, y: 28 },
+        show: { opacity: 1, y: 0 },
+      }}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, amount: 0.25 }}
+      transition={{ duration: 0.55, delay: index * 0.08 }}
+      className="relative lg:pl-14"
+    >
+      <div className="absolute left-0 top-8 z-10 hidden h-10 w-10 items-center justify-center rounded-full border border-[#2d5ca0] bg-[linear-gradient(180deg,#0f1830,#091425)] text-[#7ec4ff] shadow-[0_12px_28px_rgba(0,0,0,0.3)] lg:inline-flex">
+        {item.icon}
+      </div>
+
+      <div className="group/card relative overflow-hidden rounded-[28px] border border-[#18355f] bg-[linear-gradient(180deg,rgba(7,12,22,0.94),rgba(4,7,12,0.99))] p-5 shadow-[0_18px_45px_rgba(0,0,0,0.35)] transition duration-300 hover:-translate-y-1 hover:border-[#4f8cff] hover:shadow-[0_28px_65px_rgba(25,84,190,0.22)] sm:p-6">
+        <div className="absolute inset-0 opacity-0 transition duration-500 group-hover/card:opacity-100 bg-[radial-gradient(circle_at_top_right,rgba(79,178,255,0.14),transparent_30%)]" />
+        <div className="pointer-events-none absolute inset-0 rounded-[28px] border border-transparent opacity-0 transition duration-300 group-hover/card:border-[#7ec4ff]/60 group-hover/card:opacity-100" />
+        <div className="absolute right-4 top-2 text-[4.4rem] font-semibold leading-none tracking-[-0.08em] text-white/[0.05] sm:right-6">
+          {item.step}
+        </div>
+
+        <div className="relative">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="rounded-full border border-[#21437a] bg-[#081326] px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-[#9db8ea]">
+              {item.label}
+            </span>
+            <span className="rounded-full border border-[#1c3962] bg-[#071120] px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-[#7ec4ff]">
+              {item.period}
+            </span>
+          </div>
+
+          <div className="mt-5 flex items-start gap-4">
+            <div className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-[#21437a] bg-[#081326] text-[#4fb2ff] lg:hidden">
+              {item.icon}
+            </div>
+            <div>
+              <h3 className="text-2xl font-semibold tracking-[-0.04em] text-white">
+                {item.title}
+              </h3>
+              <p className="mt-2 text-base font-medium text-[#dbe7ff]">{item.subtitle}</p>
+            </div>
+          </div>
+
+          <p className="mt-4 max-w-2xl text-sm leading-7 text-[#a3afc9] sm:text-base">
+            {item.summary}
+          </p>
+
+          <div className="mt-5 flex flex-wrap gap-2">
+            {item.highlights.map((highlight) => (
+              <span
+                key={highlight}
+                className="rounded-full border border-[#1d3358] bg-[#07101d] px-3 py-1 text-xs font-medium text-[#dbe7ff]"
+              >
+                {highlight}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </motion.article>
+  );
+}
+
 export default function DenishDilshanPortfolio() {
   const githubUrl = "https://github.com/denishdilshan";
   const linkedInUrl = "https://www.linkedin.com/in/denish-dilshan-4856b3217/";
   const repositoriesUrl = `${githubUrl}?tab=repositories`;
+  const cvDownloadUrl = "/Denish_Dilshan.pdf";
   const emailAddress = "dilshandenish@gmail.com";
   const phoneNumber = "0764616384";
 
@@ -382,6 +466,31 @@ export default function DenishDilshanPortfolio() {
     },
   ];
 
+  const educationItems: EducationItem[] = [
+    {
+      label: "Degree",
+      title: "Bachelor of Software Engineering (Hons)",
+      subtitle: "The Open University of Sri Lanka",
+      period: "2021 - 2025",
+      summary:
+        "Built a strong academic foundation in software engineering, problem solving, and application development through a four-year honours degree journey.",
+      highlights: ["Four-year honours degree", "Software engineering focus", "Academic foundation"],
+      icon: <BookIcon className="h-5 w-5" />,
+      step: "01",
+    },
+    {
+      label: "Internship",
+      title: "Intern Software Engineer",
+      subtitle: "TRACE Theory to Trade (T2T)",
+      period: "7.10.2024 - 7.04.2025",
+      summary:
+        "Gained practical industry exposure as an Intern Software Engineer, applying academic knowledge in a real work environment and strengthening hands-on development experience.",
+      highlights: ["Six-month internship", "Industry experience", "Real-world exposure"],
+      icon: <RocketIcon className="h-5 w-5" />,
+      step: "02",
+    },
+  ];
+
   const contactItems: ContactItem[] = [
     {
       icon: <MailIcon className="h-5 w-5" />,
@@ -400,6 +509,7 @@ export default function DenishDilshanPortfolio() {
   const navItems: NavItem[] = [
     { label: "Home", href: "#home" },
     { label: "About Me", href: "#about" },
+    { label: "Education", href: "#education" },
     { label: "Featured Projects", href: "#projects" },
     { label: "Services", href: "#services" },
     { label: "Contact", href: "#contact" },
@@ -516,13 +626,14 @@ export default function DenishDilshanPortfolio() {
                 >
                   View My Work
                 </a>
-                <SafeExternalLink
-                  href={linkedInUrl}
-                  ariaLabel="Hire Denish Dilshan through LinkedIn"
+                <a
+                  href={cvDownloadUrl}
+                  download
+                  aria-label="Download Denish Dilshan CV"
                   className="inline-flex items-center gap-2 rounded-full border border-[#264c85] bg-[#08111f] px-6 py-3 text-sm font-semibold text-white transition hover:border-[#4f8cff] hover:bg-[#0b1628]"
                 >
-                  Hire Me
-                </SafeExternalLink>
+                  Download My CV
+                </a>
               </div>
             </div>
 
@@ -555,7 +666,7 @@ export default function DenishDilshanPortfolio() {
 
               <div className="mt-5 max-w-none space-y-4 text-[0.98rem] leading-7 text-[#a3afc9] sm:text-base">
                 <p>
-                  I am a final-year Bachelor of Software Engineering student with a strong passion for web development and building practical software solutions. I enjoy creating responsive and efficient web applications using modern technologies.
+                  I have a strong academic foundation in software engineering and a deep passion for web development and building practical software solutions. I enjoy creating responsive and efficient web applications using modern technologies.
                 </p>
                 <p>
                   I have experience working with frontend and backend development, and I am particularly interested in developing systems that improve user experience and solve real-world problems.
@@ -578,6 +689,50 @@ export default function DenishDilshanPortfolio() {
                     {skill}
                   </span>
                 ))}
+              </div>
+            </div>
+          </div>
+        </motion.section>
+
+        <motion.section
+          id="education"
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.65 }}
+          className="group relative mt-12 overflow-hidden rounded-[32px] border border-[#162646] bg-[linear-gradient(180deg,rgba(7,11,21,0.96),rgba(3,5,10,0.99))] p-6 shadow-[0_24px_70px_rgba(0,0,0,0.42)] transition duration-300 hover:-translate-y-1 hover:border-[#4f8cff] hover:shadow-[0_32px_85px_rgba(25,84,190,0.24)] sm:p-7 lg:p-8"
+        >
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(79,178,255,0.11),transparent_18%),linear-gradient(135deg,transparent_0%,transparent_54%,rgba(9,20,39,0.48)_54%,transparent_100%)]" />
+          <div className="pointer-events-none absolute inset-0 rounded-[32px] border border-transparent opacity-0 transition duration-300 group-hover:border-[#7ec4ff]/60 group-hover:opacity-100" />
+          <div className="absolute left-[-10%] top-[20%] h-56 w-56 rounded-full bg-[#1548a0]/10 blur-[90px]" />
+          <div className="absolute right-[-6%] top-[8%] h-48 w-48 rounded-full bg-[#0d7fda]/10 blur-[85px]" />
+          <div className="relative">
+            <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+              <div className="max-w-2xl">
+                <p className="text-sm uppercase tracking-[0.28em] text-[#8092b7]">Education</p>
+                <h2 className="mt-3 text-3xl font-semibold tracking-[-0.05em] text-white sm:text-4xl">
+                  From academic foundations to industry experience
+                </h2>
+                <p className="mt-4 text-base leading-8 text-[#a3afc9]">
+                  My learning journey combines university study with hands-on internship experience, helping me grow as a developer who values both strong fundamentals and practical execution.
+                </p>
+              </div>
+
+              <div className="inline-flex items-center gap-2 self-start rounded-full border border-[#21437a] bg-[#081326] px-4 py-2 text-sm text-[#d7ebff]">
+                <BookIcon className="h-4 w-4 text-[#4fb2ff]" />
+                Learning and growth
+              </div>
+            </div>
+
+            <div className="relative mt-8 mx-auto w-full max-w-4xl">
+              <div className="relative">
+                <div className="absolute bottom-8 left-4 top-8 hidden w-px bg-[linear-gradient(180deg,rgba(79,178,255,0.05),rgba(79,178,255,0.55),rgba(79,178,255,0.08))] lg:block" />
+                <div className="space-y-5">
+                  {educationItems.map((item, index) => (
+                    <EducationMilestone key={`${item.label}-${item.title}`} item={item} index={index} />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
